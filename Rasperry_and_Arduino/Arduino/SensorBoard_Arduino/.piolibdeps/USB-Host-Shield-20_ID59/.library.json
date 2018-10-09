@@ -1,0 +1,71 @@
+{
+    "license": "GPL-2.0", 
+    "name": "USB-Host-Shield-20", 
+    "repository": {
+        "url": "https://github.com/felis/USB_Host_Shield_2.0.git", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "teensy", 
+        "atmelavr", 
+        "nordicnrf51", 
+        "atmelsam", 
+        "ststm32", 
+        "espressif8266", 
+        "intel_arc32"
+    ], 
+    "frameworks": [
+        "spl", 
+        "arduino"
+    ], 
+    "version": "1.3.0", 
+    "examples": [
+        "examples/*/*.ino", 
+        "examples/*/*/*.ino"
+    ], 
+    "authors": [
+        {
+            "maintainer": true, 
+            "name": "Oleg Mazurov", 
+            "url": "http://www.circuitsathome.com", 
+            "email": "mazurov@circuitsathome.com"
+        }, 
+        {
+            "url": null, 
+            "maintainer": false, 
+            "email": "alex-gl@mail.ru", 
+            "name": "Alexei Glushchenko"
+        }, 
+        {
+            "maintainer": true, 
+            "name": "Kristian Lauszus", 
+            "url": "http://tkjelectronics.com", 
+            "email": "kristianl@tkjelectronics.com"
+        }, 
+        {
+            "maintainer": true, 
+            "name": "Andrew Kroll", 
+            "url": null, 
+            "email": "xxxajk@gmail.com"
+        }
+    ], 
+    "keywords": [
+        "usb", 
+        "spp", 
+        "mass storage", 
+        "pl2303", 
+        "acm", 
+        "ftdi", 
+        "xbox", 
+        "host", 
+        "hid", 
+        "wii", 
+        "buzz", 
+        "ps3", 
+        "bluetooth", 
+        "adk", 
+        "ps4"
+    ], 
+    "id": 59, 
+    "description": "Revision 2.0 of MAX3421E-based USB Host Shield Library"
+}
