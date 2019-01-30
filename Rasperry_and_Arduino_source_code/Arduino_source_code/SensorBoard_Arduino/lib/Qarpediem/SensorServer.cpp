@@ -88,56 +88,9 @@ void SensorServer::init(void){
 	pinMode(Qarpediem::DIG_MVT, INPUT);
 
 	Serial.flush();
-}
-void SensorServer::testeOPCN()
-{
-	if(now_ms() - last_histogram_dust > 5000){
-		last_histogram_dust = now_ms();
-		dust_histogram = dust_sensor.read_histogram();
-
-	Serial.println("-------------------------------------------");
-	Serial.print("dust_pm1 :");
-	Serial.println((float)dust_histogram.pm1);
-	Serial.print("dust_pm25 :");
-	Serial.println((float)dust_histogram.pm25);
-	Serial.print("dust_pm10 :");
-	Serial.println((float)dust_histogram.pm10);
-	Serial.print("dust_bin0 :");
-	Serial.println((float)dust_histogram.bin0);
-	Serial.print("dust_bin1 :");
-	Serial.println((float)dust_histogram.bin1);
-	Serial.print("dust_bin2 :");
-	Serial.println((float)dust_histogram.bin2);
-	Serial.print("dust_bin3 :");
-	Serial.println((float)dust_histogram.bin3);
-	Serial.print("dust_bin4 :");
-	Serial.println((float)dust_histogram.bin4);
-	Serial.print("dust_bin5 :");
-	Serial.println((float)dust_histogram.bin5);
-	Serial.print("dust_bin6 :");
-	Serial.println((float)dust_histogram.bin6);
-	Serial.print("dust_bin7 :");
-	Serial.println((float)dust_histogram.bin7);
-	Serial.print("dust_bin8 :");
-	Serial.println((float)dust_histogram.bin8);
-	Serial.print("dust_bin9 :");
-	Serial.println((float)dust_histogram.bin9);
-	Serial.print("dust_bin10 :");
-	Serial.println((float)dust_histogram.bin10);
-	Serial.print("dust_bin11 :");
-	Serial.println((float)dust_histogram.bin11);
-	Serial.print("dust_bin12:");
-	Serial.println((float)dust_histogram.bin12);
-	Serial.print("dust_bin13 :");
-	Serial.println((float)dust_histogram.bin13);
-	Serial.print("dust_bin14 :");
-	Serial.println((float)dust_histogram.bin14);
-	Serial.print("dust_bin15 :");
-	Serial.println((float)dust_histogram.bin15);
-
-  }
 
 }
+
 
 void SensorServer::routine(void){
 	DuplexBase::routine();
@@ -150,7 +103,8 @@ void SensorServer::routine(void){
 		sound_sensor.push_value(analogRead(Qarpediem::ANALOG_SON_ENVOLOPE));
 	}
 
-	if(is_connected()){
+//	status_led.setColorRGB(0, 0, 30, 0);// ALpha. à suprimer apres
+	if(is_connected()){ // à decommenter
 		status_led.setColorRGB(0, 0, 30, 0);
 	} else {
 		status_led.setColorRGB(0, 30, 0, 0);
@@ -246,22 +200,14 @@ void SensorServer::on_sensor_adc(char id){
 void SensorServer::on_sensor_dust(String sensor_name){
 	if(sensor_name == "dust_pm1"){
 		send_response_ok((float) dust_histogram.pm1);
-		Serial.print("dust_pm1 :");
-		Serial.println((float)dust_histogram.pm1);
 	} else if(sensor_name == "dust_pm2.5"){
 		send_response_ok((float) dust_histogram.pm25);
-		Serial.print("dust_pm2.5 :");
-		Serial.println((float)dust_histogram.pm25);
 	} else if(sensor_name == "dust_pm10"){
 		send_response_ok((float) dust_histogram.pm10);
-		Serial.print("dust_pm10 :");
-		Serial.println((float)dust_histogram.pm10);
 	} else if(sensor_name == "dust_histogram"){
 		send_response_error();
-		Serial.println("not implemented !");
+		Serial.println("not implemented ");
 	} else {
-		//--------Alpha-----------------------------
-
 		send_dust_bin_particleCC(sensor_name);
 	}
 }
@@ -269,68 +215,36 @@ void SensorServer::on_sensor_dust(String sensor_name){
 void SensorServer::send_dust_bin_particleCC(String sensor_name){
 	if (sensor_name=="dust_bin00_partcc") {
 			send_response_ok((float) dust_histogram.bin0);
-			Serial.print("dust_bin00 :");
-			Serial.println((float)dust_histogram.bin0);
 	}else if (sensor_name=="dust_bin01_partcc") {
 			send_response_ok((float) dust_histogram.bin1);
-			Serial.print("dust_bin01 :");
-			Serial.println((float)dust_histogram.bin1);
 	}else if (sensor_name=="dust_bin02_partcc") {
 			send_response_ok((float) dust_histogram.bin2);
-			Serial.print("dust_bin02 :");
-			Serial.println((float)dust_histogram.bin2);
 	}else if (sensor_name=="dust_bin03_partcc") {
 			send_response_ok((float) dust_histogram.bin3);
-			Serial.print("dust_bin03 :");
-			Serial.println((float)dust_histogram.bin3);
 	}else if (sensor_name=="dust_bin04_partcc") {
 			send_response_ok((float) dust_histogram.bin4);
-			Serial.print("dust_bin04 :");
-			Serial.println((float)dust_histogram.bin4);
 	}else if (sensor_name=="dust_bin05_partcc") {
 			send_response_ok((float) dust_histogram.bin5);
-			Serial.print("dust_bin05 :");
-			Serial.println((float)dust_histogram.bin5);
 	}else if (sensor_name=="dust_bin06_partcc") {
 			send_response_ok((float) dust_histogram.bin6);
-			Serial.print("dust_bin06 :");
-			Serial.println((float)dust_histogram.bin6);
 	}else if (sensor_name=="dust_bin07_partcc") {
 			send_response_ok((float)dust_histogram.bin7);
-			Serial.print("dust_bin07 :");
-			Serial.println((float)dust_histogram.bin7);
 	}else if (sensor_name=="dust_bin08_partcc") {
 			send_response_ok((float) dust_histogram.bin8);
-			Serial.print("dust_bin08 :");
-			Serial.println((float)dust_histogram.bin8);
 	}else if (sensor_name=="dust_bin09_partcc") {
 			send_response_ok((float) dust_histogram.bin9);
-			Serial.print("dust_bin09 :");
-			Serial.println((float)dust_histogram.bin9);
 	}else if (sensor_name=="dust_bin10_partcc") {
 			send_response_ok((float) dust_histogram.bin10);
-			Serial.print("dust_bin10 :");
-			Serial.println((float)dust_histogram.bin10);
 	}else if (sensor_name=="dust_bin11_partcc") {
 			send_response_ok((float) dust_histogram.bin11);
-			Serial.print("dust_bin11 :");
-			Serial.println((float)dust_histogram.bin11);
 	}else if (sensor_name=="dust_bin12_partcc") {
 			send_response_ok((float) dust_histogram.bin12);
-			Serial.print("dust_bin12 :");
-			Serial.println((float)dust_histogram.bin12);
 	}else if (sensor_name=="dust_bin13_partcc") {
 			send_response_ok((float) dust_histogram.bin13);
-			Serial.print("dust_bin13 :");
-			Serial.println((float)dust_histogram.bin13);
 	}else if (sensor_name=="dust_bin14_partcc") {
 			send_response_ok((float) dust_histogram.bin14);
-			Serial.print("dust_bin14 :");
-			Serial.println((float)dust_histogram.bin14);
 	}else if (sensor_name=="dust_bin15_partcc") {
 			send_response_ok((float) dust_histogram.bin15);
-			Serial.print("dust_bin15 :");
-			Serial.println((float)dust_histogram.bin15);
 	}else{
 			send_badquery();
 		}
@@ -338,13 +252,16 @@ void SensorServer::send_dust_bin_particleCC(String sensor_name){
 }
 
 void SensorServer::on_sensor(String sensor_name){
+		String tmpname=sensor_name;
+		address=getSensorAddress(tmpname);
+
 	if(sensor_name.startsWith("aps") && sensor_name.length() == 4){
 		if(adc.is_alive()){
 			on_sensor_adc(sensor_name.charAt(3));
 		} else {
 			send_response_error();
 		}
-	} else if(sensor_name.startsWith("dust_")){
+	}else if(sensor_name.startsWith("dust_")){
 		if(dust_sensor.ping()){
 			on_sensor_dust(sensor_name);
 		} else {
@@ -372,12 +289,14 @@ void SensorServer::on_sensor(String sensor_name){
 			send_response_error();
 		}
 	} else if(sensor_name == "luminosity"){
-		float lux = TSL2561.readVisibleLux();
+
+		float lux =  TSL2561.readVisibleLux(); //lecture qui bloque.
 		if(lux != -1){
 			send_response_ok(lux);
 		} else {
 			send_response_error();
 		}
+
 	} else if(sensor_name == "motion"){
 		send_response_ok(motion_sensor.get_average_level() * 100.0);
 	} else if(sensor_name == "sound"){
@@ -401,7 +320,7 @@ void SensorServer::on_config(String config){
 }
 
 void SensorServer::on_query(const char *query_str){
-	Serial.print("incoming query: ");
+	Serial.print("\n incoming query: ");
 	Serial.println(query_str);
 
 	String query(query_str);
@@ -416,4 +335,62 @@ void SensorServer::on_query(const char *query_str){
 	} else {
 		send_badquery();
 	}
+}
+
+
+
+void SensorServer::testeOPCN()
+{
+	if(now_ms() - last_histogram_dust > 5000){
+		last_histogram_dust = now_ms();
+		dust_histogram = dust_sensor.read_histogram();
+
+	Serial.println("-------------------------------------------");
+	Serial.print("dust_pm1 :");
+	Serial.println((float)dust_histogram.pm1);
+	Serial.print("dust_pm25 :");
+	Serial.println((float)dust_histogram.pm25);
+	Serial.print("dust_pm10 :");
+	Serial.println((float)dust_histogram.pm10);
+	Serial.print("dust_bin0 :");
+	Serial.println((float)dust_histogram.bin0);
+	Serial.print("dust_bin1 :");
+	Serial.println((float)dust_histogram.bin1);
+	Serial.print("dust_bin2 :");
+	Serial.println((float)dust_histogram.bin2);
+	Serial.print("dust_bin3 :");
+	Serial.println((float)dust_histogram.bin3);
+	Serial.print("dust_bin4 :");
+	Serial.println((float)dust_histogram.bin4);
+	Serial.print("dust_bin5 :");
+	Serial.println((float)dust_histogram.bin5);
+	Serial.print("dust_bin6 :");
+	Serial.println((float)dust_histogram.bin6);
+	Serial.print("dust_bin7 :");
+	Serial.println((float)dust_histogram.bin7);
+	Serial.print("dust_bin8 :");
+	Serial.println((float)dust_histogram.bin8);
+	Serial.print("dust_bin9 :");
+	Serial.println((float)dust_histogram.bin9);
+	Serial.print("dust_bin10 :");
+	Serial.println((float)dust_histogram.bin10);
+	Serial.print("dust_bin11 :");
+	Serial.println((float)dust_histogram.bin11);
+	Serial.print("dust_bin12:");
+	Serial.println((float)dust_histogram.bin12);
+	Serial.print("dust_bin13 :");
+	Serial.println((float)dust_histogram.bin13);
+	Serial.print("dust_bin14 :");
+	Serial.println((float)dust_histogram.bin14);
+	Serial.print("dust_bin15 :");
+	Serial.println((float)dust_histogram.bin15);
+
+  }
+
+}
+
+
+int SensorServer::getAddress(){
+return address;
+
 }

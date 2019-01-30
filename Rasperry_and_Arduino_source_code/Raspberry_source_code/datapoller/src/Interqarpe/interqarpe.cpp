@@ -1,11 +1,5 @@
 #include "InterQarpe.h"
-#include "QueryResult.h"
-#include <stdio.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-#include <ctime>
-#include <unistd.h>
+
 
 using namespace std;
 using namespace InterQarpe;
@@ -150,8 +144,13 @@ bool DuplexBase::_query(const char* query){
 }
 
 QueryResult DuplexBase::query(const char* query){
+	
 	QueryResult::result_t result;
-
+	is_remote_address_valid=false;
+	string sensorName(query);
+	sensorName.erase(0,9); // we delete sensors::
+    	int  ad=(int)getSensorAddress(sensorName);
+	
 	if(!_query(query)){
 		return QueryResult(QueryResult::TIMEOUT, NULL, 0);
 	}
@@ -170,8 +169,14 @@ QueryResult DuplexBase::query(const char* query){
 		break;
 	}
 
-	packet.available = false;
-	return QueryResult(result, packet.data, packet.data_size);
+		packet.available = false;
+
+		int rmtAddr = (int)getRemoteAddress();
+			
+		is_remote_address_valid= rmtAddr ==ad? true : false;
+		//cout<<"is_remote_address_valid "<<std::boolalpha <<is_remote_address_valid<<endl;
+
+		return QueryResult(result, packet.data, packet.data_size);	
 }
 
 void DuplexBase::handle_incoming_query(){
@@ -233,3 +238,115 @@ void DuplexBase::routine(void){
 bool DuplexBase::is_connected(void){
 	return connected;
 }
+
+void DuplexBase::retry_request(int max, const char *query){
+	int cpt=0;
+	cout<<"we have not the good response so we make  maximum "<< max<<"  recursive request.  " <<endl;
+	while(!is_remote_address_valid && cpt<max){
+		usleep(500000);
+		cout<<"loop : "<<cpt<<endl;
+		DuplexBase::query(query);
+		cpt++;
+	}
+}
+
+bool  DuplexBase::getIs_remote_address_valid(){
+	return is_remote_address_valid;
+}
+
+float DuplexBase::getRemoteAddress(){
+	float adr=0;
+	float *ptint=(float *)packet.data ;
+	adr = *(ptint+1);
+	return  adr;
+}
+
+bool DuplexBase::startsWith(std::string mainStr, std::string toMatch)
+{
+    // std::string::find returns 0 if toMatch is found at starting
+    if(mainStr.find(toMatch) == 0)
+        return true;
+    else
+        return false;
+}
+
+uint8_t  DuplexBase::getSensorAddress(string sensorName){
+    uint8_t adr;
+
+	    if(sensorName=="motion"){
+		adr=MOTION;
+	    }else if (sensorName=="sound") {
+		adr=SOUND;
+	    }else if (sensorName=="luminosity") {
+		adr=LUMINOSITY;
+	    }else if (sensorName=="humidity") {
+		adr=HUMIDITY;
+	    }else if (sensorName=="pressure") {
+		adr=PRESSURE;
+	    }else if (sensorName=="temperature") {
+		adr=TEMPERATURE;
+	    }else if (sensorName=="aps1") {
+		adr=APS1;
+	    }else if (sensorName=="aps2") {
+		adr=APS2;
+	    }else if (sensorName=="aps3") {
+		adr=APS3;
+	    }else if (sensorName=="aps4") {
+		adr=APS4;
+	    }else if (sensorName=="aps5") {
+		adr=APS5;
+	    }else if (sensorName=="aps6") {
+		adr=APS6;
+	    }else if (sensorName=="aps7") {
+		adr=APS7;
+	    }else if (sensorName=="aps8") {
+		adr=APS8;
+	    }else if (sensorName=="co2") {
+		adr=CO2;
+	    }else if (sensorName=="dust_pm1") {
+		adr=DUST_PM1;
+	    }else if (sensorName=="dust_pm2.5") {
+		adr=DUST_PM25;
+	    }else if (sensorName=="dust_pm10") {
+		adr=DUST_PM10;
+	    }else if (sensorName=="dust_bin00_partcc") {
+		adr=DUST_BIN00_PARTCC;
+	    }else if (sensorName=="dust_bin01_partcc") {
+		adr=DUST_BIN01_PARTCC;
+	    }else if (sensorName=="dust_bin02_partcc") {
+		adr=DUST_BIN02_PARTCC;
+	    }else if (sensorName=="dust_bin03_partcc") {
+		adr=DUST_BIN03_PARTCC;
+	    }else if (sensorName=="dust_bin04_partcc") {
+		adr=DUST_BIN04_PARTCC;
+	    }else if (sensorName=="dust_bin05_partcc") {
+		adr=DUST_BIN05_PARTCC;
+	    }else if (sensorName=="dust_bin06_partcc") {
+		adr=DUST_BIN06_PARTCC;
+	    }else if (sensorName=="dust_bin07_partcc") {
+		adr=DUST_BIN07_PARTCC;
+	    }else if (sensorName=="dust_bin08_partcc") {
+		adr=DUST_BIN08_PARTCC;
+	    }else if (sensorName=="dust_bin09_partcc") {
+		adr=DUST_BIN09_PARTCC;
+	    }else if (sensorName=="dust_bin10_partcc") {
+		adr=DUST_BIN10_PARTCC;
+	    }else if (sensorName=="dust_bin11_partcc") {
+		adr=DUST_BIN11_PARTCC;
+	    }else if (sensorName=="dust_bin12_partcc") {
+		adr=DUST_BIN12_PARTCC;
+	    }else if (sensorName=="dust_bin13_partcc") {
+		adr=DUST_BIN13_PARTCC;
+	    }else if (sensorName=="dust_bin14_partcc") {
+		adr=DUST_BIN14_PARTCC;
+	    }else if (sensorName=="dust_bin15_partcc") {
+		adr=DUST_BIN15_PARTCC;
+	    }else {
+		adr=0;
+	    }
+
+
+	    return adr;
+
+}
+

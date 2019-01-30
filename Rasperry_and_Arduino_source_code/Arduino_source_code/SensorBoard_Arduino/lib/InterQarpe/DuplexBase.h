@@ -1,6 +1,7 @@
 #ifndef __INTERQARPE_DUPLEX__
 #define __INTERQARPE_DUPLEX__
 
+#include <Arduino.h>
 #include <stdint.h>
 #include <stddef.h>
 #include "QueryResult.h"
@@ -47,6 +48,44 @@ class DuplexBase {
 	// Prefix value of the InterQarpe packet
 	static const uint8_t PREFIX1 = 0xB1;
 	static const uint8_t PREFIX2 = 0X42;
+
+
+	//Sensor's Address
+	static const uint8_t APS1 = 1;
+	static const uint8_t APS2 = 2;
+	static const uint8_t APS3 = 3;
+	static const uint8_t APS4 = 4;
+	static const uint8_t APS5 = 5;
+	static const uint8_t APS6 = 6;
+	static const uint8_t APS7 = 7;
+	static const uint8_t APS8 = 8;
+	static const uint8_t MOTION = 9;
+	static const uint8_t  SOUND = 10;
+	static const uint8_t LUMINOSITY = 11;
+	static const uint8_t HUMIDITY = 12;
+	static const uint8_t PRESSURE = 13;
+	static const uint8_t TEMPERATURE = 14;
+	static const uint8_t CO2 = 15;
+	static const uint8_t DUST_PM1 = 16;
+	static const uint8_t DUST_PM25 = 17;
+	static const uint8_t DUST_PM10 = 18;
+	static const uint8_t DUST_BIN00_PARTCC = 19;
+	static const uint8_t DUST_BIN01_PARTCC = 20;
+	static const uint8_t DUST_BIN02_PARTCC = 21;
+	static const uint8_t DUST_BIN03_PARTCC = 22;
+	static const uint8_t DUST_BIN04_PARTCC = 23;
+	static const uint8_t DUST_BIN05_PARTCC = 24;
+	static const uint8_t DUST_BIN06_PARTCC = 25;
+	static const uint8_t DUST_BIN07_PARTCC = 26;
+	static const uint8_t DUST_BIN08_PARTCC = 27;
+	static const uint8_t DUST_BIN09_PARTCC = 28;
+	static const uint8_t DUST_BIN10_PARTCC = 29;
+	static const uint8_t DUST_BIN11_PARTCC = 30;
+	static const uint8_t DUST_BIN12_PARTCC = 31;
+	static const uint8_t DUST_BIN13_PARTCC = 32;
+	static const uint8_t DUST_BIN14_PARTCC = 33;
+	static const uint8_t DUST_BIN15_PARTCC = 34;
+
 
 	/**
 	 * Represent a packet we've received.
@@ -191,7 +230,6 @@ class DuplexBase {
 	void handle_connection();
 
 #endif // __DOXYGEN__
-
 	/**
 	 * Write bytes in the serial port
 	 *
@@ -234,7 +272,25 @@ class DuplexBase {
 	 **/
 	virtual uint32_t now_ms(void) = 0;
 
+/*
+*virtual method that return the addres of sensor asked for the raspberry
+*/
+	virtual int getAddress(void) = 0;
+
 protected:
+
+	/**Add the Address of sensor that we want to query to the packet
+	*this method must be called before calling send_response_ok
+	**/
+	template<typename T>
+	void addAddress_to_data_packet(T *data,int addr);
+
+/*
+*return the sensor address according the name gived in parameter
+*/
+	int getSensorAddress(String sensorName) ;
+
+
 	/**
 	 * send a "ok" response without any data
 	 */

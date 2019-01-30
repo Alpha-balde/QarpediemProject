@@ -52,11 +52,13 @@ public:
 	template<typename T>
 	bool get_data(T* data);
 
+
 private:
 #ifndef __DOXYGEN__
 	uint8_t* query_data;
 	result_t query_result;
 	size_t data_size;
+
 #endif // __DOXYGEN__
 };
 

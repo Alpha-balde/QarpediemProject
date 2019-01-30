@@ -35,7 +35,6 @@ bool DuplexBase::write_packet(uint8_t type, uint8_t* data, size_t data_length){
 	written_bytes += write_bytes(buffer, sizeof(buffer));
 	written_bytes += write_bytes(data, data_length);
 	written_bytes += write_bytes(&data_checkcode, 1);
-
 	return written_bytes == (sizeof(buffer) + data_length + 1);
 }
 
@@ -214,7 +213,7 @@ void DuplexBase::handle_connection(){
 	if(packet.available && packet.type == PAQ_HEARTBEAT){
 		last_received_heartbeat = now_ms();
 		packet.available = false;
-		Serial.print("packet heartb ok");
+		Serial.print("packet heartb ok ");
 		connected = true;
 	}
 
@@ -235,4 +234,85 @@ void DuplexBase::routine(void){
 
 bool DuplexBase::is_connected(void){
 	return connected;
+}
+
+
+int DuplexBase::getSensorAddress(String sensorName){
+    int adr;
+
+    if(sensorName=="motion"){
+        adr=MOTION;
+    }else if (sensorName=="sound") {
+        adr=SOUND;
+    }else if (sensorName=="luminosity") {
+        adr=LUMINOSITY;
+    }else if (sensorName=="humidity") {
+        adr=HUMIDITY;
+    }else if (sensorName=="pressure") {
+        adr=PRESSURE;
+    }else if (sensorName=="temperature") {
+        adr=TEMPERATURE;
+    }else if (sensorName=="aps1") {
+        adr=APS1;
+    }else if (sensorName=="aps2") {
+        adr=APS2;
+    }else if (sensorName=="aps3") {
+        adr=APS3;
+    }else if (sensorName=="aps4") {
+        adr=APS4;
+    }else if (sensorName=="aps5") {
+        adr=APS5;
+    }else if (sensorName=="aps6") {
+        adr=APS6;
+    }else if (sensorName=="aps7") {
+        adr=APS7;
+    }else if (sensorName=="aps8") {
+        adr=APS8;
+    }else if (sensorName=="co2") {
+        adr=CO2;
+    }else if (sensorName=="dust_pm1") {
+        adr=DUST_PM1;
+    }else if (sensorName=="dust_pm2.5") {
+        adr=DUST_PM25;
+    }else if (sensorName=="dust_pm10") {
+        adr=DUST_PM10;
+    }else if (sensorName=="dust_bin00_partcc") {
+        adr=DUST_BIN00_PARTCC;
+    }else if (sensorName=="dust_bin01_partcc") {
+        adr=DUST_BIN01_PARTCC;
+    }else if (sensorName=="dust_bin02_partcc") {
+        adr=DUST_BIN02_PARTCC;
+    }else if (sensorName=="dust_bin03_partcc") {
+        adr=DUST_BIN03_PARTCC;
+    }else if (sensorName=="dust_bin04_partcc") {
+        adr=DUST_BIN04_PARTCC;
+    }else if (sensorName=="dust_bin05_partcc") {
+        adr=DUST_BIN05_PARTCC;
+    }else if (sensorName=="dust_bin06_partcc") {
+        adr=DUST_BIN06_PARTCC;
+    }else if (sensorName=="dust_bin07_partcc") {
+        adr=DUST_BIN07_PARTCC;
+    }else if (sensorName=="dust_bin08_partcc") {
+        adr=DUST_BIN08_PARTCC;
+    }else if (sensorName=="dust_bin09_partcc") {
+        adr=DUST_BIN09_PARTCC;
+    }else if (sensorName=="dust_bin10_partcc") {
+        adr=DUST_BIN10_PARTCC;
+    }else if (sensorName=="dust_bin11_partcc") {
+        adr=DUST_BIN11_PARTCC;
+    }else if (sensorName=="dust_bin12_partcc") {
+        adr=DUST_BIN12_PARTCC;
+    }else if (sensorName=="dust_bin13_partcc") {
+        adr=DUST_BIN13_PARTCC;
+    }else if (sensorName=="dust_bin14_partcc") {
+        adr=DUST_BIN14_PARTCC;
+    }else if (sensorName=="dust_bin15_partcc") {
+        adr=DUST_BIN15_PARTCC;
+    }else {
+        adr=0;
+    }
+
+
+    return adr;
+
 }

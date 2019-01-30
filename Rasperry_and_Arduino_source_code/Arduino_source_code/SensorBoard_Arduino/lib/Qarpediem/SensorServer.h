@@ -1,7 +1,6 @@
 #ifndef __DUPLEX_SENSORS__
 #define __DUPLEX_SENSORS__
 
-#include <Arduino.h>
 #include <DuplexBase.h>
 #include <AlphaSense.h>
 
@@ -11,18 +10,22 @@ namespace Qarpediem {
 
 class SensorServer : public DuplexBase {
 #ifndef __DOXYGEN__
+
 	HardwareSerial* serial;
 	uint32_t last_poll_average;
 	AlphaSense::HistogramData dust_histogram;
-//	AlphaSense::HistogramData dust_histogram_raw_count; // Alpha
-
 	uint32_t last_histogram_dust;
 	uint32_t last_ping_dust;
+  //Address of the sensor requested
+  int address = 200;// must be between 1 to 35; 
+
 #endif // __DOXYGEN__
 
 	int write_bytes(uint8_t* buffer, size_t buffer_length);
 
 	int read_bytes(uint8_t* buffer, size_t buffer_length);
+
+	int getAddress(void) ;
 
 	size_t bytes_available();
 
@@ -35,8 +38,6 @@ class SensorServer : public DuplexBase {
 	void on_sensor(String sensor_name);
 	void on_sensor_adc(char id);
 	void on_sensor_dust(String sensor_name);
-
-
 
 	void send_dust_bin_particleCC(String sensor_name);
 

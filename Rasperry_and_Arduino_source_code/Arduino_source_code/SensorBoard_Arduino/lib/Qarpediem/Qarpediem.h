@@ -16,7 +16,6 @@ namespace Qarpediem {
 	int const DIGI_2_LED = 27;
 	int const ANALOG_SON_ENVOLOPE = A14;
 	int const ANALOG_PRESSION = A12;
-
 	HardwareSerial* const D_SUB_SERIAL = &Serial2;
 };
 

@@ -76,6 +76,7 @@ static const char* sql_init =
 ");"
 
 // values are in seconds
+//"('server_host', '193.49.213.132'),"
 "INSERT OR IGNORE INTO config.settings (name, value) VALUES "
 	"('serial_port', '/dev/ttyS0'),"
 	"('node_address', 'NA'),"
@@ -84,8 +85,8 @@ static const char* sql_init =
 	"('interval_ip', 30),"
 	"('interval_lora', 42),"
 	"('send_mode', 'ip'),"
-	"('server_host', '127.0.0.1'),"
-	"('server_port', 8080)"
+	"('server_host', 'localhost'),"
+	"('server_port', 5555)"
 ";"
 
 "DELETE FROM sensors.polls WHERE done=0;"

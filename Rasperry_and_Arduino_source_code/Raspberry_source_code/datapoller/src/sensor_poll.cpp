@@ -4,6 +4,7 @@
 #include <ctime>
 #include <csignal>
 #include <exception>
+#include <iostream>
 
 using namespace std;
 
@@ -31,17 +32,32 @@ static uint32_t now_millisec() {
 	return spec.tv_sec * 1e3 + spec.tv_nsec / 1e6;
 }
 
-static
-void poll_sensor(void* poll_ptr, string id, double sensibility, double offset){
+static void poll_sensor(void* poll_ptr, string id, double sensibility, double offset){
 	time_t* poll = static_cast<time_t*>(poll_ptr);
 	string query = "sensors::" + id;
+	if(sensors.startsWith(id,"sound") && id.length()>7){
+		return; // we exclude sound_xxx
+	} 
 
 	// Flush serial port
-	usleep(10000);
+	usleep(100000);
 	tcflush(sensors.getFileDescriptor(), TCIFLUSH);
 	
 	// Query
 	QueryResult result = sensors.query(query.c_str());
+	int counter=0;
+	while(counter <3 && !sensors.getIs_remote_address_valid() ){
+		cout<<"we have not the good response for  " <<query;
+		cout<<" ------------> retry : "<<  counter+1<<"/3"<<endl;
+		result = sensors.query(query.c_str());
+		counter++;
+	}// end of while
+	
+	if(!sensors.getIs_remote_address_valid()) {
+		cerr<<"so we leave this poll and do not store any thing"<<endl;
+		return;
+	} 
+
 	float data;
 	static time_t last_query = now_millisec();
 
@@ -56,52 +72,6 @@ void poll_sensor(void* poll_ptr, string id, double sensibility, double offset){
 		data = (data - offset) / sensibility;
 		database->push_data(id, *poll, data);	
 	}
-	/*else{ // 2nd try
-		static time_t last_poll2 = now_millisec();
-		// Query
-		result = sensors.query(query.c_str());
-
-		while(!result.get_data(&data))
-		{
-			time_t now2 = now_millisec();
-			if(now2 - last_poll2 > 50) break; // 30 ms
-		}
-		
-		if(result.get_data(&data))
-		{
-			cout << id << ": " << data << endl;
-			data = (data - offset) / sensibility;
-			database->push_data(id, *poll, data);
-
-		}
-		else // 3rd try
-		{
-			static time_t last_poll3 = now_millisec();
-			// Query
-			result = sensors.query(query.c_str());
-
-			while(!result.get_data(&data))
-			{
-				time_t now3 = now_millisec();
-				if(now3 - last_poll3 > 50) break; // 30 ms
-			}
-
-			if(result.get_data(&data))
-			{
-				cout << id << ": " << data << endl;
-				data = (data - offset) / sensibility;
-				database->push_data(id, *poll, data);
-			}
-			else // If 3rd try fails
-			{
-				data = -1.0;
-				cout << id << ": " << data << endl;
-				data = (data - offset) / sensibility;
-				database->push_data(id, *poll, data);
-			}
-		} // End 3rd try
-		
-	}*/ // End 2nd try
 
 	
 } // End poll_sensor()
